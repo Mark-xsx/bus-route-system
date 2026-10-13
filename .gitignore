@@ -1,0 +1,19 @@
+# 编译产物
+*.exe
+*.o
+*.obj
+*.out
+
+# 构建目录
+build/
+Debug/
+Release/
+.vs/
+
+# 编辑器配置
+.vscode/
+.idea/
+
+# 第三方库（如果不想提交可以保留，通常建议提交）
+# httplib.h
+# json.hpp
