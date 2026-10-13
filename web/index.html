@@ -2,17 +2,22 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>公交路线自动化选择系统</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container py-4">
-  <h1 class="text-center mb-4">公交路线自动化选择系统</h1>
+<div class="container">
+
+  <h1 class="page-title">
+    公交路线自动化选择系统
+    <span class="sub">BUS ROUTE SYSTEM</span>
+  </h1>
 
   <!-- 登录区 -->
-  <div id="loginPanel" class="card p-4 mx-auto" style="max-width:420px;">
-    <h4 class="mb-3">请选择角色</h4>
+  <div id="loginPanel" class="card login-card">
+    <h4>请选择角色</h4>
     <button class="btn btn-primary w-100 mb-2" onclick="login('user')">普通用户</button>
     <button class="btn btn-warning w-100 mb-2" onclick="showAdminLogin()">管理员</button>
     <div id="adminPwdBox" class="mt-2 d-none">
@@ -26,30 +31,37 @@
     <ul class="nav nav-tabs mb-3">
       <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#routeTab">线路查询</a></li>
       <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#lineTab">车次查询</a></li>
-      <li class="nav-item"><a class="nav-link" onclick="logout()">退出</a></li>
+      <li class="nav-item"><a class="nav-link logout" onclick="logout()">退出</a></li>
     </ul>
     <div class="tab-content">
       <div class="tab-pane fade show active" id="routeTab">
-        <div class="row g-2 mb-3">
-          <div class="col-md-3"><input id="from" class="form-control" placeholder="起点"></div>
-          <div class="col-md-3"><input id="to" class="form-control" placeholder="终点"></div>
-          <div class="col-md-3">
-            <select id="strategy" class="form-select">
-              <option value="1">最少时间</option>
-              <option value="2">最少站点</option>
-              <option value="3">最少换乘</option>
-            </select>
+        <div class="card">
+          <div class="row g-2 mb-3 align-items-center">
+            <div class="col-md-3"><input id="from" class="form-control" placeholder="起点"></div>
+            <div class="col-md-3"><input id="to" class="form-control" placeholder="终点"></div>
+            <div class="col-md-3">
+              <select id="strategy" class="form-select">
+                <option value="1">最少时间</option>
+                <option value="2">最少站点</option>
+                <option value="3">最少换乘</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-primary w-100" onclick="queryRoute()">查询</button>
+            </div>
           </div>
-          <div class="col-md-3"><button class="btn btn-primary w-100" onclick="queryRoute()">查询</button></div>
+          <div id="routeResult"></div>
         </div>
-        <div id="routeResult"></div>
       </div>
+
       <div class="tab-pane fade" id="lineTab">
-        <div class="row g-2 mb-3">
-          <div class="col-md-6"><input id="lineid" class="form-control" placeholder="线路名，如 1 号线"></div>
-          <div class="col-md-6"><button class="btn btn-primary w-100" onclick="queryLine()">查询</button></div>
+        <div class="card">
+          <div class="row g-2 mb-3">
+            <div class="col-md-6"><input id="lineid" class="form-control" placeholder="线路名，如 1 号线"></div>
+            <div class="col-md-6"><button class="btn btn-primary w-100" onclick="queryLine()">查询</button></div>
+          </div>
+          <div id="lineResult"></div>
         </div>
-        <div id="lineResult"></div>
       </div>
     </div>
   </div>
@@ -59,27 +71,52 @@
     <ul class="nav nav-tabs mb-3">
       <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#addTab">新增线路</a></li>
       <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#modTab">修改线路</a></li>
-      <li class="nav-item"><a class="nav-link" onclick="logout()">退出</a></li>
+      <li class="nav-item"><a class="nav-link logout" onclick="logout()">退出</a></li>
     </ul>
     <div class="tab-content">
       <div class="tab-pane fade show active" id="addTab">
-        <div class="card p-3">
-          <input id="addLineid" class="form-control mb-2" placeholder="线路名，如 11 号线">
-          <input id="addFirst" class="form-control mb-2" placeholder="首班车，如 06:00">
-          <input id="addLast" class="form-control mb-2" placeholder="末班车，如 23:00">
+        <div class="card">
+          <label>线路名称</label>
+          <input id="addLineid" class="form-control mb-3" placeholder="如：11 号线">
+
+          <div class="row g-2 mb-3">
+            <div class="col-md-6">
+              <label>首班车</label>
+              <input id="addFirst" class="form-control" placeholder="如：06:00">
+            </div>
+            <div class="col-md-6">
+              <label>末班车</label>
+              <input id="addLast" class="form-control" placeholder="如：23:00">
+            </div>
+          </div>
+
+          <label>站点列表</label>
           <div id="addStations"></div>
-          <button class="btn btn-secondary mb-2" onclick="addStationRow('addStations')">添加站点</button>
-          <button class="btn btn-success" onclick="addLine()">提交新增</button>
+          <button class="btn btn-secondary mb-3" onclick="addStationRow('addStations')">+ 添加站点</button>
+          <button class="btn btn-success w-100" onclick="addLine()">提交新增</button>
         </div>
       </div>
+
       <div class="tab-pane fade" id="modTab">
-        <div class="card p-3">
-          <select id="modSelect" class="form-select mb-2" onchange="loadLineForEdit()"></select>
-          <input id="modFirst" class="form-control mb-2" placeholder="首班车">
-          <input id="modLast" class="form-control mb-2" placeholder="末班车">
+        <div class="card">
+          <label>选择线路</label>
+          <select id="modSelect" class="form-select mb-3" onchange="loadLineForEdit()"></select>
+
+          <div class="row g-2 mb-3">
+            <div class="col-md-6">
+              <label>首班车</label>
+              <input id="modFirst" class="form-control">
+            </div>
+            <div class="col-md-6">
+              <label>末班车</label>
+              <input id="modLast" class="form-control">
+            </div>
+          </div>
+
+          <label>站点列表</label>
           <div id="modStations"></div>
-          <button class="btn btn-secondary mb-2" onclick="addStationRow('modStations')">添加站点</button>
-          <button class="btn btn-success" onclick="modifyLine()">提交修改</button>
+          <button class="btn btn-secondary mb-3" onclick="addStationRow('modStations')">+ 添加站点</button>
+          <button class="btn btn-success w-100" onclick="modifyLine()">提交修改</button>
         </div>
       </div>
     </div>
