@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <string>
+#include <cstdlib>
 
 using namespace std;
 using json = nlohmann::json;
@@ -191,7 +192,10 @@ int main() {
     // 托管前端静态文件
     svr.set_mount_point("/", "./web");
 
-    cout << "服务已启动：http://127.0.0.1:8080\n";
-    svr.listen("0.0.0.0", 8080);
+    const char* port_env = std::getenv("PORT");
+int port = port_env ? std::stoi(port_env) : 8080;
+
+cout << "服务已启动，监听端口: " << port << endl;
+svr.listen("0.0.0.0", port);
     return 0;
 }
