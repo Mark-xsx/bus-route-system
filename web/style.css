@@ -1,4 +1,249 @@
-body { background: #f5f7fa; }
-.card { border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
-#routeResult .route-card { background:#fff; border-radius:10px; padding:12px; margin-bottom:12px; }
-.station { padding:2px 0; }
+/* ===== 全局 ===== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  color: #2c3e50;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
+}
+
+/* ===== 页面标题 ===== */
+.page-title {
+  text-align: center;
+  color: #fff;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin: 30px 0 25px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.page-title .sub {
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 4px;
+  opacity: 0.85;
+  margin-top: 6px;
+}
+
+/* ===== 容器 ===== */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 16px 60px;
+}
+
+/* ===== 卡片通用 ===== */
+.card {
+  background: #fff;
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  padding: 28px;
+  animation: fadeInUp 0.45s ease both;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== 登录卡片 ===== */
+.login-card {
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.login-card h4 {
+  text-align: center;
+  font-weight: 700;
+  margin: 0 0 22px;
+  color: #2c3e50;
+}
+
+.login-card .btn {
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.login-card .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.35);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border: none;
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, #f6b93b, #e58e26);
+  border: none;
+  color: #fff;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #43cea2, #185a9d);
+  border: none;
+}
+
+.btn-secondary {
+  background: #eef1f6;
+  color: #4a5568;
+  border: none;
+}
+
+/* ===== Tab 导航 ===== */
+.nav-tabs {
+  border: none;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 12px;
+  padding: 6px;
+  backdrop-filter: blur(6px);
+}
+
+.nav-tabs .nav-link {
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 20px;
+  transition: background 0.2s;
+}
+
+.nav-tabs .nav-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.nav-tabs .nav-link.active {
+  background: #fff;
+  color: #667eea;
+}
+
+/* 退出按钮样式 */
+.nav-tabs .nav-link.logout {
+  color: #ffd6d6;
+}
+
+.nav-tabs .nav-link.logout:hover {
+  background: rgba(255, 80, 80, 0.25);
+}
+
+/* ===== 表单控件 ===== */
+.form-control,
+.form-select {
+  border-radius: 10px;
+  border: 1.5px solid #dfe6ee;
+  padding: 10px 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.18);
+}
+
+label {
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* ===== 查询结果卡片 ===== */
+.route-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-top: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  animation: fadeInUp 0.35s ease both;
+}
+
+.route-card h5 {
+  margin: 0 0 16px;
+  font-weight: 700;
+  color: #2c3e50;
+  border-bottom: 2px solid #f0f3f8;
+  padding-bottom: 10px;
+}
+
+.route-card .line-label {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  margin: 12px 0 8px;
+}
+
+.route-card .line-label.transfer {
+  background: linear-gradient(135deg, #f6b93b, #e58e26);
+}
+
+.route-card .station {
+  position: relative;
+  padding: 6px 0 6px 22px;
+  color: #4a5568;
+  border-left: 2px dashed #d7dde6;
+  margin-left: 8px;
+}
+
+.route-card .station::before {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 12px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #667eea;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px #667eea33;
+}
+
+/* ===== 管理员站点行 ===== */
+.input-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.input-group .form-control {
+  flex: 1;
+}
+
+.input-group .btn-outline-danger {
+  border-radius: 10px;
+}
+
+/* ===== 提示框 ===== */
+.alert-warning {
+  background: #fff8e1;
+  border: none;
+  border-left: 4px solid #f6b93b;
+  color: #8a6d1a;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 16px;
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 600px) {
+  .page-title { font-size: 22px; }
+  .card { padding: 18px; }
+  .nav-tabs .nav-link { padding: 8px 12px; font-size: 14px; }
+}
