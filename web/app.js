@@ -1,4 +1,3 @@
-// ==================== 通用请求函数 ====================
 const api = async (url, data) => {
   const res = await fetch(url, {
     method: "POST",
@@ -8,7 +7,6 @@ const api = async (url, data) => {
   return res.json();
 };
 
-// ==================== 登录/登出 ====================
 function login(role) {
   const pwd = document.getElementById("adminPwd")?.value || "";
   api("/api/login", { role, password: pwd }).then(r => {
@@ -18,8 +16,8 @@ function login(role) {
       document.getElementById("userPanel").classList.remove("d-none");
     } else {
       document.getElementById("adminPanel").classList.remove("d-none");
-      loadLineList();      // 填充修改线路下拉框
-      loadDelLineList();   // 填充删除线路下拉框
+      loadLineList();
+      loadDelLineList();
     }
   });
 }
@@ -32,7 +30,6 @@ function logout() {
   location.reload();
 }
 
-// ==================== 线路查询（快速） ====================
 async function queryRoute() {
   const from = document.getElementById("from").value.trim();
   const to = document.getElementById("to").value.trim();
@@ -43,10 +40,8 @@ async function queryRoute() {
     box.innerHTML = `<div class="alert alert-warning">未找到路线</div>`;
     return;
   }
-
-  let html = `<div class="route-card">
-    <h5>查询结果</h5>
-    <div>总站数：<b>${r.totalstops}</b>　换乘：<b>${r.totaltransfer}</b> 次　时间：<b>${r.totaltime}</b> 分钟</div>`;
+  let html = `<div class="route-card"><h5>查询结果</h5>
+    <div>总站数：<b>${r.totalstops}</b> 换乘：<b>${r.totaltransfer}</b> 次 时间：<b>${r.totaltime}</b> 分钟</div>`;
   let cur = "";
   for (const s of r.steps) {
     if (s.line !== cur) {
@@ -59,7 +54,6 @@ async function queryRoute() {
   box.innerHTML = html;
 }
 
-// ==================== 所有可达路线（详细） ====================
 async function queryAllRoutes() {
   const from = document.getElementById("from").value.trim();
   const to = document.getElementById("to").value.trim();
@@ -69,7 +63,6 @@ async function queryAllRoutes() {
     box.innerHTML = `<div class="alert alert-warning">${r.message}</div>`;
     return;
   }
-
   let html = `<div class="route-card"><h5>共 ${r.routes.length} 条可达路线</h5>`;
   r.routes.forEach((route, idx) => {
     html += `<div style="margin-bottom:18px; padding-bottom:14px; border-bottom:1px dashed #e0e6ee;">`;
@@ -93,7 +86,6 @@ async function queryAllRoutes() {
   box.innerHTML = html;
 }
 
-// ==================== 车次查询 ====================
 async function queryLine() {
   const lineid = document.getElementById("lineid").value.trim();
   const r = await api("/api/line_query", { lineid });
@@ -102,10 +94,8 @@ async function queryLine() {
     box.innerHTML = `<div class="alert alert-warning">${r.message}</div>`;
     return;
   }
-
-  let html = `<div class="route-card">
-    <h5>${r.lineid}</h5>
-    <div>首班：<b>${r.firstbus}</b>　末班：<b>${r.lastbus}</b></div><hr>`;
+  let html = `<div class="route-card"><h5>${r.lineid}</h5>
+    <div>首班：<b>${r.firstbus}</b> 末班：<b>${r.lastbus}</b></div><hr>`;
   r.stations.forEach((s, i) => {
     html += `<div class="station">${i + 1}. ${s.name}${s.interval ? `（到下一站约 ${s.interval} 分钟）` : ""}</div>`;
   });
@@ -113,7 +103,6 @@ async function queryLine() {
   box.innerHTML = html;
 }
 
-// ==================== 站点信息（经过线路） ====================
 async function queryStationLines() {
   const station = document.getElementById("stationName").value.trim();
   if (!station) { alert("请输入站点名"); return; }
@@ -123,15 +112,12 @@ async function queryStationLines() {
     box.innerHTML = `<div class="alert alert-warning">未找到经过该站点的线路</div>`;
     return;
   }
-  let html = `<div class="route-card"><h5>经过“${r.station}”的线路</h5><ul>`;
-  r.lines.forEach(l => {
-    html += `<li>${l}</li>`;
-  });
+  let html = `<div class="route-card"><h5>经过"${r.station}"的线路</h5><ul>`;
+  r.lines.forEach(l => { html += `<li>${l}</li>`; });
   html += `</ul></div>`;
   box.innerHTML = html;
 }
 
-// ==================== 管理员：站点行操作 ====================
 function addStationRow(containerId, name = "", interval = 0) {
   const box = document.getElementById(containerId);
   const row = document.createElement("div");
@@ -154,7 +140,6 @@ function collectStations(containerId) {
   return arr;
 }
 
-// ==================== 管理员：新增线路 ====================
 async function addLine() {
   const lineid = document.getElementById("addLineid").value.trim();
   const firstbus = document.getElementById("addFirst").value.trim();
@@ -173,7 +158,6 @@ async function addLine() {
   }
 }
 
-// ==================== 管理员：修改线路 ====================
 async function loadLineList() {
   const res = await fetch("/api/lines");
   const lines = await res.json();
@@ -210,7 +194,6 @@ async function modifyLine() {
   if (r.success) loadLineList();
 }
 
-// ==================== 管理员：删除线路 ====================
 async function loadDelLineList() {
   const res = await fetch("/api/lines");
   const lines = await res.json();
@@ -233,7 +216,4 @@ async function deleteLine() {
     loadLineList();
     loadDelLineList();
   }
-}
-  alert(r.message);
-  if (r.success) loadLineList();
 }
