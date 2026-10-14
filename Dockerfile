@@ -9,8 +9,8 @@ COPY . .
 
 # 编译 C++ 程序，链接必要的系统库
 # -lws2_32 是 Windows 下的库，在 Linux 环境中不需要，需移除
-RUN g++ -o bus_server main.cpp menu.cpp datamanager.cpp shortesttime.cpp feweststops.cpp fewesttransfers.cpp -std=c++11 -lpthread
-
+RUN g++ -o bus_server main.cpp menu.cpp routequery.cpp datamanager.cpp shortesttime.cpp feweststops.cpp fewesttransfers.cpp -std=c++11 -lpthread
+# 声明容器在运行时监听的端口，与代码中绑定的一致
 # 声明容器在运行时监听的端口，与代码中绑定的一致
 EXPOSE 8080
 
