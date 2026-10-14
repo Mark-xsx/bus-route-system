@@ -13,4 +13,7 @@ json handleLineQuery(const json& req, datamanager& dm);
 json handleAddLine(const json& req, datamanager& dm);
 json handleModifyLine(const json& req, datamanager& dm);
 json handleGetLines(datamanager& dm);
-json handleAllRoutes(const json& req, datamanager& dm);   // 新增：所有可达路线
+json handleAllRoutes(const json& req, datamanager& dm); 
+json handleDeleteLine(const json& req, datamanager& dm);
+json handleGetStations(datamanager& dm);
+json handleGetStationLines(const json& req, datamanager& dm);// 新增：所有可达路线
