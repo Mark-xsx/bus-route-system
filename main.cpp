@@ -60,6 +60,12 @@ int main() {
         json out = handleGetLines(dm);
         res.set_content(out.dump(), "application/json");
     });
+     // 7. 所有可达路线
+svr.Post("/api/all_routes", [&](const httplib::Request& req, httplib::Response& res) {
+    auto body = json::parse(req.body);
+    json out = handleAllRoutes(body, dm);
+    res.set_content(out.dump(), "application/json");
+});
 
     // 托管前端静态文件
     svr.set_mount_point("/", "./web");
