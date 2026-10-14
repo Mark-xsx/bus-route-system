@@ -18,7 +18,8 @@ function login(role) {
       document.getElementById("userPanel").classList.remove("d-none");
     } else {
       document.getElementById("adminPanel").classList.remove("d-none");
-      loadLineList();
+      loadLineList();      // 填充修改线路下拉框
+      loadDelLineList();   // 填充删除线路下拉框
     }
   });
 }
@@ -33,8 +34,8 @@ function logout() {
 
 // ==================== 线路查询（快速） ====================
 async function queryRoute() {
-  const from = document.getElementById("from").value;
-  const to = document.getElementById("to").value;
+  const from = document.getElementById("from").value.trim();
+  const to = document.getElementById("to").value.trim();
   const strategy = parseInt(document.getElementById("strategy").value);
   const r = await api("/api/route_query", { from, to, strategy });
   const box = document.getElementById("routeResult");
@@ -60,8 +61,8 @@ async function queryRoute() {
 
 // ==================== 所有可达路线（详细） ====================
 async function queryAllRoutes() {
-  const from = document.getElementById("from").value;
-  const to = document.getElementById("to").value;
+  const from = document.getElementById("from").value.trim();
+  const to = document.getElementById("to").value.trim();
   const r = await api("/api/all_routes", { from, to });
   const box = document.getElementById("routeResult");
   if (!r.success) {
@@ -94,7 +95,7 @@ async function queryAllRoutes() {
 
 // ==================== 车次查询 ====================
 async function queryLine() {
-  const lineid = document.getElementById("lineid").value;
+  const lineid = document.getElementById("lineid").value.trim();
   const r = await api("/api/line_query", { lineid });
   const box = document.getElementById("lineResult");
   if (!r.success) {
@@ -109,6 +110,24 @@ async function queryLine() {
     html += `<div class="station">${i + 1}. ${s.name}${s.interval ? `（到下一站约 ${s.interval} 分钟）` : ""}</div>`;
   });
   html += `</div>`;
+  box.innerHTML = html;
+}
+
+// ==================== 站点信息（经过线路） ====================
+async function queryStationLines() {
+  const station = document.getElementById("stationName").value.trim();
+  if (!station) { alert("请输入站点名"); return; }
+  const r = await api("/api/station_lines", { station });
+  const box = document.getElementById("stationResult");
+  if (!r.success || r.lines.length === 0) {
+    box.innerHTML = `<div class="alert alert-warning">未找到经过该站点的线路</div>`;
+    return;
+  }
+  let html = `<div class="route-card"><h5>经过“${r.station}”的线路</h5><ul>`;
+  r.lines.forEach(l => {
+    html += `<li>${l}</li>`;
+  });
+  html += `</ul></div>`;
   box.innerHTML = html;
 }
 
@@ -145,7 +164,8 @@ async function addLine() {
   const r = await api("/api/admin/add_line", { lineid, firstbus, lastbus, stations });
   alert(r.message);
   if (r.success) {
-    loadLineList();          // 刷新下拉框
+    loadLineList();
+    loadDelLineList();
     document.getElementById("addLineid").value = "";
     document.getElementById("addFirst").value = "";
     document.getElementById("addLast").value = "";
@@ -186,6 +206,34 @@ async function modifyLine() {
   const stations = collectStations("modStations");
   if (!lineid) { alert("请选择线路"); return; }
   const r = await api("/api/admin/modify_line", { lineid, firstbus, lastbus, stations });
+  alert(r.message);
+  if (r.success) loadLineList();
+}
+
+// ==================== 管理员：删除线路 ====================
+async function loadDelLineList() {
+  const res = await fetch("/api/lines");
+  const lines = await res.json();
+  const sel = document.getElementById("delSelect");
+  sel.innerHTML = "";
+  lines.forEach(l => {
+    const opt = document.createElement("option");
+    opt.value = l; opt.textContent = l;
+    sel.appendChild(opt);
+  });
+}
+
+async function deleteLine() {
+  const lineid = document.getElementById("delSelect").value;
+  if (!lineid) { alert("请选择要删除的线路"); return; }
+  if (!confirm(`确定删除线路 ${lineid} 吗？此操作不可恢复。`)) return;
+  const r = await api("/api/admin/delete_line", { lineid });
+  alert(r.message);
+  if (r.success) {
+    loadLineList();
+    loadDelLineList();
+  }
+}
   alert(r.message);
   if (r.success) loadLineList();
 }
