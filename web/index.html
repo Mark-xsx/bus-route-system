@@ -15,7 +15,7 @@
     <span class="sub">BUS ROUTE SYSTEM</span>
   </h1>
 
-  <!-- 登录区 -->
+  <!-- ========== 登录区 ========== -->
   <div id="loginPanel" class="card login-card">
     <h4>请选择角色</h4>
     <button class="btn btn-primary w-100 mb-2" onclick="login('user')">普通用户</button>
@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <!-- 普通用户区 -->
+  <!-- ========== 普通用户区 ========== -->
   <div id="userPanel" class="d-none">
     <ul class="nav nav-tabs mb-3">
       <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#routeTab">线路查询</a></li>
@@ -34,6 +34,7 @@
       <li class="nav-item"><a class="nav-link logout" onclick="logout()">退出</a></li>
     </ul>
     <div class="tab-content">
+      <!-- 线路查询 -->
       <div class="tab-pane fade show active" id="routeTab">
         <div class="card">
           <div class="row g-2 mb-3 align-items-center">
@@ -47,13 +48,19 @@
               </select>
             </div>
             <div class="col-md-3">
-              <button class="btn btn-primary w-100" onclick="queryRoute()">查询</button>
+              <button class="btn btn-primary w-100" onclick="queryRoute()">快速查询</button>
+            </div>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-12">
+              <button class="btn btn-success w-100" onclick="queryAllRoutes()">详细查询（所有可达路线）</button>
             </div>
           </div>
           <div id="routeResult"></div>
         </div>
       </div>
 
+      <!-- 车次查询 -->
       <div class="tab-pane fade" id="lineTab">
         <div class="card">
           <div class="row g-2 mb-3">
@@ -66,7 +73,7 @@
     </div>
   </div>
 
-  <!-- 管理员区 -->
+  <!-- ========== 管理员区 ========== -->
   <div id="adminPanel" class="d-none">
     <ul class="nav nav-tabs mb-3">
       <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#addTab">新增线路</a></li>
@@ -74,6 +81,7 @@
       <li class="nav-item"><a class="nav-link logout" onclick="logout()">退出</a></li>
     </ul>
     <div class="tab-content">
+      <!-- 新增线路 -->
       <div class="tab-pane fade show active" id="addTab">
         <div class="card">
           <label>线路名称</label>
@@ -97,6 +105,7 @@
         </div>
       </div>
 
+      <!-- 修改线路 -->
       <div class="tab-pane fade" id="modTab">
         <div class="card">
           <label>选择线路</label>
