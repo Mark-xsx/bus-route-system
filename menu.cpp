@@ -134,7 +134,53 @@ json handleAddLine(const json& req, datamanager& dm) {
     out["message"] = ok ? "新增成功" : "保存失败";
     return out;
 }
+// 管理员：删除线路
+json handleDeleteLine(const json& req, datamanager& dm) {
+    string lineid = req.value("lineid", "");
+    json out;
+    auto it = dm.alllines.find(lineid);
+    if (it == dm.alllines.end()) {
+        out["success"] = false;
+        out["message"] = "线路不存在";
+        return out;
+    }
+    dm.alllines.erase(it);
+    dm.rebuildgraph();
+    bool ok = dm.savetofile("data.txt");
+    out["success"] = ok;
+    out["message"] = ok ? "删除成功" : "删除后保存失败";
+    return out;
+}
 
+// 获取所有站点
+json handleGetStations(datamanager& dm) {
+    json arr = json::array();
+    for (auto& s : dm.allstations) {
+        arr.push_back(s.name);
+    }
+    return arr;
+}
+
+// 获取经过某站点的线路
+json handleGetStationLines(const json& req, datamanager& dm) {
+    string stationName = req.value("station", "");
+    json out;
+    json lines = json::array();
+    for (auto& p : dm.alllines) {
+        const string& lineid = p.first;
+        const busline& line = p.second;
+        for (auto& s : line.stations) {
+            if (s.name == stationName) {
+                lines.push_back(lineid);
+                break;
+            }
+        }
+    }
+    out["success"] = true;
+    out["station"] = stationName;
+    out["lines"] = lines;
+    return out;
+}
 // 管理员：修改线路
 json handleModifyLine(const json& req, datamanager& dm) {
     string lineid = req.value("lineid", "");
