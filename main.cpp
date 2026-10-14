@@ -66,7 +66,25 @@ svr.Post("/api/all_routes", [&](const httplib::Request& req, httplib::Response& 
     json out = handleAllRoutes(body, dm);
     res.set_content(out.dump(), "application/json");
 });
+// 管理员：删除线路
+svr.Post("/api/admin/delete_line", [&](const httplib::Request& req, httplib::Response& res) {
+    auto body = json::parse(req.body);
+    json out = handleDeleteLine(body, dm);
+    res.set_content(out.dump(), "application/json");
+});
 
+// 获取所有站点
+svr.Get("/api/stations", [&](const httplib::Request&, httplib::Response& res) {
+    json out = handleGetStations(dm);
+    res.set_content(out.dump(), "application/json");
+});
+
+// 获取经过某站点的线路
+svr.Post("/api/station_lines", [&](const httplib::Request& req, httplib::Response& res) {
+    auto body = json::parse(req.body);
+    json out = handleGetStationLines(body, dm);
+    res.set_content(out.dump(), "application/json");
+});
     // 托管前端静态文件
     svr.set_mount_point("/", "./web");
 
