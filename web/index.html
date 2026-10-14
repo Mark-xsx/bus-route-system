@@ -31,6 +31,7 @@
     <ul class="nav nav-tabs mb-3">
       <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#routeTab">线路查询</a></li>
       <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#lineTab">车次查询</a></li>
+      <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#stationTab">站点信息</a></li>
       <li class="nav-item"><a class="nav-link logout" onclick="logout()">退出</a></li>
     </ul>
     <div class="tab-content">
@@ -70,6 +71,17 @@
           <div id="lineResult"></div>
         </div>
       </div>
+
+      <!-- 站点信息 -->
+      <div class="tab-pane fade" id="stationTab">
+        <div class="card">
+          <div class="row g-2 mb-3">
+            <div class="col-md-6"><input id="stationName" class="form-control" placeholder="输入站点名，如 南京站"></div>
+            <div class="col-md-6"><button class="btn btn-primary w-100" onclick="queryStationLines()">查询</button></div>
+          </div>
+          <div id="stationResult"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -78,6 +90,7 @@
     <ul class="nav nav-tabs mb-3">
       <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#addTab">新增线路</a></li>
       <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#modTab">修改线路</a></li>
+      <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#delTab">删除线路</a></li>
       <li class="nav-item"><a class="nav-link logout" onclick="logout()">退出</a></li>
     </ul>
     <div class="tab-content">
@@ -126,6 +139,15 @@
           <div id="modStations"></div>
           <button class="btn btn-secondary mb-3" onclick="addStationRow('modStations')">+ 添加站点</button>
           <button class="btn btn-success w-100" onclick="modifyLine()">提交修改</button>
+        </div>
+      </div>
+
+      <!-- 删除线路 -->
+      <div class="tab-pane fade" id="delTab">
+        <div class="card">
+          <label>选择要删除的线路</label>
+          <select id="delSelect" class="form-select mb-3"></select>
+          <button class="btn btn-danger w-100" onclick="deleteLine()">删除线路</button>
         </div>
       </div>
     </div>
