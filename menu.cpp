@@ -10,6 +10,11 @@
 
 using namespace std;
 
+// ==================== 前向声明 ====================
+void mergeroute(vector<routeinfo>& all, const routeans& ans, int flag);
+void allroutesmenu(datamanager& dm);
+
+
 // ==================== Web 业务处理函数 ====================
 
 // 登录
